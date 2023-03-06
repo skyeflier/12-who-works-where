@@ -1,16 +1,20 @@
-const Role = require('./Department')
+const Department = require('./Department')
 
 class Role extends Department {
-    constructor(id, name, title, salary) {
-        super(id, name)
-        this.title = title
-        this.salary = salary
+    constructor(addDepartmentId, addDepartmentName, addRoleId, addRoleTitle, addRoleSalary) {
+        super(addDepartmentId, addDepartmentName)
+        this.addRoleId = addRoleId
+        this.addRoleTitle = addRoleTitle
+        this.addRoleSalary = addRoleSalary
     }
     getTitle() {
-        return this.title
+        return this.addRoleId
+    }
+    getTitle() {
+        return this.addRoleTitle
     }
     getSalary() {
-        return this.salary
+        return this.addRoleSalary
     }
     getRole() {
         return 'Role'

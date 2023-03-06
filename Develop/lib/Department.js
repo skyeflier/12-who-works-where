@@ -1,16 +1,19 @@
 class Department {
-    constructor(departmentId, name) {
-        this.departmentId = departmentId
-        this.name = name
+    constructor(addDepartmentId, addDepartmentName) {
+        this.addDepartmentId = addDepartmentId
+        this.addDepartmentName = addDepartmentName
     }
     getDepartmentId() {
-        return this.departmentId
+        return this.addDepartmentId
     }
     getName() {
-        return this.name
+        return this.addDepartmentName
     }
     getDepartment() {
         return 'Department'
+    }
+    createDepartment() {
+        //THIS IS WHERE I WRITE SQL DATABASE
     }
 }
 
