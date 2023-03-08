@@ -143,26 +143,26 @@ function viewEmployeeFunction() {
 function nextQuestion() {
     inquirer.prompt(primaryQuestions)
         .then(answer => {
-            if (answer.addDepartment === 'Add Department') {
-                addDepartmentFunction()
-            }
-            else if (answer.primaryQuestions === 'View all departments') {
+            if (answer.primaryQuestions === 'View all departments') {
                 viewDepartmentFunction()
             }
-            else if (answer.addRole === 'Add Role') {
+            else if (answer.primaryQuestions === 'Add a department') {
+                addDepartmentFunction()
+            }
+            else if (answer.primaryQuestions === 'View all roles') {
+                vieRoleFunction()
+            }
+            else if (answer.primaryQuestions === 'Add a role') {
                 addRoleFunction()
             }
-            else if (answer.viewRole === 'View Role') {
-                viewRoleFunction()
-            }
-            else if (answer.updateRole === 'Update Role') {
+            else if (answer.primaryQuestions === 'Update an employee role') {
                 updateRoleFunction()
             }
-            else if (answer.addEmployee === 'Add Employee') {
-                addEmployeeFunction()
-            }
-            else if (answer.viewEmployee === 'View Employee') {
+            else if (answer.primaryQuestions === 'View all employees') {
                 viewEmployeeFunction()
+            }
+            else if (answer.primaryQuestions === 'Add an employee') {
+                addEmployeeFunction()
             }
             else {
                 process.exit()
