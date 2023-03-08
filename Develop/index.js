@@ -3,13 +3,79 @@ const fs = require('fs');
 const Department = require('./lib/Department');
 const Employee = require('./lib/Employee');
 const Role = require('./lib/Role');
+const mysql = require('mysql2');
+
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    database: 'employee_tracker_db',
+    password: 'Murphy17',
+    port: 3306
+});
+
+connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected!");
+});
 
 const primaryQuestions = [{
     type: 'list',
-    choices: ['View all employees', 'Add an employee', 'View all roles', 'Add a role', 'Update an employee role', 'View all departments', 'Add a department'],
+    choices: ['View all departments', 'Add a department', 'View all roles', 'Add a role', 'Update an employee role', 'View all employees', 'Add an employee'],
     message: 'What would you like to do?',
     name: 'primaryQuestions',
 }]
+
+const addDepartment = [
+    {
+        type: 'input',
+        message: 'What is the department name?',
+        name: 'addDepartmentName',
+    },
+];
+
+const addRole = [{
+    type: 'input',
+    message: 'What is the role ID?',
+    name: 'addRoleId',
+},
+{
+    type: 'input',
+    message: 'What is the role title?',
+    name: 'addRoleTitle',
+},
+{
+    type: 'input',
+    message: 'What is the role salary?',
+    name: 'addRoleSalary',
+},
+{
+    type: 'input',
+    message: 'What is the department ID for this role?',
+    name: 'addRoleDepartmentId',
+},
+];
+
+const updateRole = [{
+    type: 'input',
+    message: 'Update the the role ID.',
+    name: 'updateRoleId',
+},
+{
+    type: 'input',
+    message: 'Update the role title.',
+    name: 'updateRoleTitle',
+},
+{
+    type: 'input',
+    message: 'Update the role salary.',
+    name: 'addRoleSalary',
+},
+{
+    type: 'input',
+    message: 'Update the department ID for this role.',
+    name: 'updateRoleDepartmentId',
+},
+];
 
 const addEmployee = [{
     type: 'input',
@@ -38,109 +104,41 @@ const addEmployee = [{
 },
 ];
 
-// const viewEmployee = [ {
-//     /////ADD//////
-// },
-
-// ];
-
-const addRole = [{
-    type: 'input',
-    message: 'What is the role ID?',
-    name: 'addRoleId',
-},
-{
-    type: 'input',
-    message: 'What is the role title?',
-    name: 'addRoleTitle',
-},
-{
-    type: 'input',
-    message: 'What is the role salary?',
-    name: 'addRoleSalary',
-},
-{
-    type: 'input',
-    message: 'What is the department ID for this role?',
-    name: 'addRoleDepartmentId',
-},
-];
-
-// const viewRole= [ {
-//         /////ADD//////
-// },
-
-// ];
-
-const updateRole = [{
-    type: 'input',
-    message: 'Update the the role ID.',
-    name: 'updateRoleId',
-},
-{
-    type: 'input',
-    message: 'Update the role title.',
-    name: 'updateRoleTitle',
-},
-{
-    type: 'input',
-    message: 'Update the role salary.',
-    name: 'addRoleSalary',
-},
-{
-    type: 'input',
-    message: 'Update the department ID for this role.',
-    name: 'updateRoleDepartmentId',
-},
-];
-
-const addDepartment = [
-    {
-        type: 'input',
-        message: 'What is the department name?',
-        name: 'addDepartmentName',
-    },
-];
-
-// const viewDepartment = [ {
-//         /////ADD//////
-// },
-// ];
 
 ////////////////////////////FUNCTIONS////////////////////////////
 
-function addDepartmentFunction() {
-    inquirer
-        .prompt(addDepartment())
-        .then(department => {
-            let department = new Department(department.addDepartmentName)
-            department.createDepartment()
-            return nextQuestion()
-        })
-}
-
 function viewDepartmentFunction() {
-    inquirer
+    connection.query(`select * from department`, (error, result) => {
+        console.table(result)
+        if (error) throw error
+    }) // Use backticks
+    return nextQuestion()
 }
 
-function addRoleFunction() {
-    inquirer
-}
+// function addDepartmentFunction() {}
+
 function viewRoleFunction() {
-    inquirer
+    connection.query(`select * from role`, (error, result) => {
+        console.table(result)
+        if (error) throw error
+    })
+    return nextQuestion()
 }
 
-function updateRoleFunction() {
-    inquirer
-}
+// function addRoleFunction() {}
 
-function addEmployeeFunction() {
-    inquirer
-}
+// function updateRoleFunction() {}
 
 function viewEmployeeFunction() {
-    inquirer
+    connection.query(`select * from employee`, (error, result) => {
+        console.table(result)
+        if (error) throw error
+    })
+    return nextQuestion()
 }
+
+// function addEmployeeFunction() {}
+
 
 function nextQuestion() {
     inquirer.prompt(primaryQuestions)
@@ -148,7 +146,7 @@ function nextQuestion() {
             if (answer.addDepartment === 'Add Department') {
                 addDepartmentFunction()
             }
-            else if (answer.viewDepartment === 'View Department') {
+            else if (answer.primaryQuestions === 'View all departments') {
                 viewDepartmentFunction()
             }
             else if (answer.addRole === 'Add Role') {
@@ -171,3 +169,5 @@ function nextQuestion() {
             }
         })
 }
+
+nextQuestion()
