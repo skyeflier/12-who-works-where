@@ -12,7 +12,7 @@ class Department {
     getDepartment() {
         return 'Department'
     }
-    createDepartment() {
+    createDepartment(name) {
         //THIS IS WHERE I WRITE SQL DATABASE
     }
 }
