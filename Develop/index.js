@@ -127,36 +127,32 @@ function addRoleFunction() {
         .then(() => nextQuestion())
 }
 
-function updateRoleFunction() {
+function updateEmployeeRoleFunction() {
     inquirer.prompt(
         [{
             type: 'input',
-            message: 'Update the the role ID.',
-            name: 'updateRoleId',
+            message: 'Which employee role do you want to update?',
+            name: 'employeeToUpdate',
         },
         {
             type: 'input',
-            message: 'Update the role title.',
-            name: 'updateRoleTitle',
-        },
-        {
-            type: 'input',
-            message: 'Update the role salary.',
-            name: 'addRoleSalary',
-        },
-        {
-            type: 'input',
-            message: 'Update the department ID for this role.',
-            name: 'updateRoleDepartmentId',
+            message: 'Which role do you want to assign to the employee',
+            name: 'updateRole',
         }])
         .then(res => {
-            connection.query(`UPDATE role SET ?`, res, (error, result) => {
-                // console.table(result)
-                // if (error) throw error
-            })
+            const updateEmployee = res.updateEmployee;
+            const updateRole = res.updateRole;
+
+            const sql = `UPDATE role (employeeToUpdate, updateRole) VALUES ('${updateEmployee}', '${updateRole}')`;
+
+            connection.query(sql, (error, result) => {
+                console.table(result);
+                if (error) throw error;
+            });
         })
         .then(() => nextQuestion())
 }
+// TRYING TO TROUBLESHOOT THE ERRRO BELOW
 
 function viewEmployeeFunction() {
     connection.query(`select * from employee`, (error, result) => {
@@ -169,11 +165,6 @@ function viewEmployeeFunction() {
 function addEmployeeFunction() {
     inquirer.prompt(
         [{
-            type: 'input',
-            message: 'What is the employee id?',
-            name: 'addEmployeeId',
-        },
-        {
             type: 'input',
             message: 'What is the their first name?',
             name: 'addEmployeeFirstName',
@@ -190,13 +181,14 @@ function addEmployeeFunction() {
         },
         {
             type: 'input',
-            message: 'What is their department ID?',
-            name: 'addEmployeeDepartmentId',
-        }])
+            message: 'What is their manager ID?',
+            name: 'addManagerId',
+        },
+        ])
         .then(res => {
             const firstName = res.addEmployeeFirstName;
             const lastName = res.addEmployeeLastName;
-            const roleId = res.addRoleId;
+            const roleId = res.addEmployeeRoleId;
             const managerId = res.addManagerId;
 
             const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${firstName}', '${lastName}', '${roleId}', '${managerId}')`;
@@ -208,6 +200,8 @@ function addEmployeeFunction() {
         })
         .then(() => nextQuestion())
 }
+
+// select the id and the UPDATE swl similar to line 198 and pass in variabls to udpate
 
 function nextQuestion() {
     inquirer.prompt(primaryQuestions)
@@ -225,7 +219,7 @@ function nextQuestion() {
                 addRoleFunction()
             }
             else if (answer.primaryQuestions === 'Update an employee role') {
-                updateRoleFunction()
+                updateEmployeeRoleFunction()
             }
             else if (answer.primaryQuestions === 'View all employees') {
                 viewEmployeeFunction()

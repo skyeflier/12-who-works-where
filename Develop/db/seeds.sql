@@ -15,12 +15,8 @@ VALUES
 ('roleThree', 300, 3);
 
 INSERT INTO employee
-(first_name, last_name, title, salary, role_id, manager_id, department_id)
+(first_name, last_name, role_id, manager_id)
 VALUES
-('firstOne', 'lastOne', 'jobOne', 100,  1, 1, 1),
-('firstTwo', 'lastTwo', 'jobOne', 200,  2, 2, 2),
-('firstThree', 'lastThree', 'jobOne', 300,  3, 3, 3);
-
--- VIEW--
-
--- DELETE--
+('firstOne', 'lastOne', 1, 1),
+('firstTwo', 'lastTwo',  2, 2),
+('firstThree', 'lastThree', 3, 3);
